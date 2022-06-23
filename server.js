@@ -14,13 +14,51 @@ const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 3008;
 
-//ROUTES--------------------------------------------
+//TEST ROUTE--------------------------------------------
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
+//ROUTE WEATHERDATA--------------------------------------------------
 app.get('/weatherData', (request, response, next) => {
+
+  try {
+    let searchQuery = request.query.searchQuery;
+    console.log(searchQuery);
+    let dataToGroom = weatherData.find(object => object.city_name.toLowerCase() === searchQuery.toLowerCase());
+    let dataToSend = dataToGroom.data.map(weatherDatetime => new Forecast(weatherDatetime));
+    response.status(200).send(dataToSend);
+
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('*', (request, response) => {
+  response.send('The thing you are looking for doesn\'t exist');
+});
+//ROUTE WEATHER-----------------------------------------
+
+app.get('/weather', (request, response, next) => {
+
+  try {
+    let searchQuery = request.query.searchQuery;
+    console.log(searchQuery);
+    let dataToGroom = weatherData.find(object => object.city_name.toLowerCase() === searchQuery.toLowerCase());
+    let dataToSend = dataToGroom.data.map(weatherDatetime => new Forecast(weatherDatetime));
+    response.status(200).send(dataToSend);
+
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+//ROUTE MOVIES-----------------------------------------
+
+
+app.get('/movies', (request, response, next) => {
 
   try {
     let searchQuery = request.query.searchQuery;
