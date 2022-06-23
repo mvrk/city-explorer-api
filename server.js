@@ -1,55 +1,59 @@
-const express = require('express');
-const app = express();
-const cors = require('cors');
-const PORT = process.env.PORT || 3002;
-let data = require('./data/weather.json');
-require('dotenv').config();
+'use strict';
+console.log('welcome to the server!');
 
+//REQUIRE-----------------------------------
+
+const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
+let weatherData = require('./data/weather.json');
+
+//USE-----------------------------------------
+
+const app = express();
 app.use(cors());
+const PORT = process.env.PORT || 3008;
+
+//ROUTES--------------------------------------------
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+app.get('/weatherData', (request, response, next) => {
 
-app.get('/weather', (request, response) => {
   try {
-    let weatherFromRequest = request.query.weather;
-    console.log(weatherFromRequest);
-    let dataToGroom = data.find(Forecast => Forecast.weather === weatherFromRequest);
-    let dataToSend = new Forecast(dataToGroom);
-    response.send(dataToSend);
+    let searchQuery = request.query.searchQuery;
+    console.log(searchQuery);
+    let dataToGroom = weatherData.find(object => object.city_name.toLowerCase() === searchQuery.toLowerCase());
+    let dataToSend = dataToGroom.data.map(weatherDatetime => new Forecast(weatherDatetime));
+    response.status(200).send(dataToSend);
+
   } catch (error) {
-    // if I have an error, it will create a new instance of the Error object that lives in Express
     next(error);
-    // this iwll instanciate any error as a new error
   }
 });
 
-// catchall route — goes at the bottom of our routes
 app.get('*', (request, response) => {
   response.send('The thing you are looking for doesn\'t exist');
 });
 
-// CLASSES
+// CLASSES-------------------------------------------
 class Forecast {
   constructor(forecastObj) {
-    this.data = forecastObj.data;
-    this.description = forecastObj.description;
+    console.log(forecastObj);
+    this.datetime = forecastObj.datetime;
+    this.description = forecastObj.weather.description;
   }
 }
 
-// ERRORS
-// Handle any errors
+// ERRORS------------------------------------------------------
+
 app.use((error, request, response, next) => {
   response.status(500).send(error.message);
-}) 
+})
 
 
-// LISTEN
-// start the server
-// .listen() is an express methos that takes in a Port value and a callback function
+// LISTEN-----------------------------------------------------
+
 app.listen(PORT, () => console.log(`listening on port ${PORT}`));
