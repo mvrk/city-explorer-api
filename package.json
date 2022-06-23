@@ -2,7 +2,7 @@
   "name": "explorer-api",
   "version": "1.0.0",
   "description": "this is a react app",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "npm start"
   },
