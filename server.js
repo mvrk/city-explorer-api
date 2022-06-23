@@ -5,8 +5,10 @@ console.log('welcome to the server!');
 
 const express = require('express');
 const cors = require('cors');
+// const { default: axios } = require('axios');
 require('dotenv').config();
-let weatherData = require('./data/weather.json');
+// let weatherData = require('./data/weather.json');
+const axios = require('axios');
 
 //USE-----------------------------------------
 
@@ -21,33 +23,36 @@ app.get('/', (req, res) => {
 })
 
 //ROUTE WEATHERDATA--------------------------------------------------
-app.get('/weatherData', (request, response, next) => {
+// app.get('/weatherData', (request, response, next) => {
 
-  try {
-    let searchQuery = request.query.searchQuery;
-    console.log(searchQuery);
-    let dataToGroom = weatherData.find(object => object.city_name.toLowerCase() === searchQuery.toLowerCase());
-    let dataToSend = dataToGroom.data.map(weatherDatetime => new Forecast(weatherDatetime));
-    response.status(200).send(dataToSend);
+//   try {
+//     let searchQuery = request.query.searchQuery;
+//     console.log(searchQuery);
+//     let dataToGroom = weatherData.find(object => object.city_name.toLowerCase() === searchQuery.toLowerCase());
+//     let dataToSend = dataToGroom.data.map(weatherDatetime => new Forecast(weatherDatetime));
+//     response.status(200).send(dataToSend);
 
-  } catch (error) {
-    next(error);
-  }
-});
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
-app.get('*', (request, response) => {
-  response.send('The thing you are looking for doesn\'t exist');
-});
+// app.get('*', (request, response) => {
+//   response.send('The thing you are looking for doesn\'t exist');
+// });
 //ROUTE WEATHER-----------------------------------------
 
-app.get('/weather', (request, response, next) => {
+app.get('/weather', async(request, response, next) => {
 
   try {
-    let searchQuery = request.query.searchQuery;
-    console.log(searchQuery);
-    let dataToGroom = weatherData.find(object => object.city_name.toLowerCase() === searchQuery.toLowerCase());
-    let dataToSend = dataToGroom.data.map(weatherDatetime => new Forecast(weatherDatetime));
+    let lat = request.query.lat;
+    let lon = request.query.lon;
+    let url = `http://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.WEATHER_API_KEY}&units=I&days=3&lat=${lat}&lon=${lon}`;
+    let dataToGroom = await axios.get(url);
+    console.log(dataToGroom);
+    let dataToSend = dataToGroom.data.data.map(weatherDatetime => new Forecast(weatherDatetime));
     response.status(200).send(dataToSend);
+    console.log(dataToSend);
 
   } catch (error) {
     next(error);
@@ -58,12 +63,12 @@ app.get('/weather', (request, response, next) => {
 //ROUTE MOVIES-----------------------------------------
 
 
-app.get('/movies', (request, response, next) => {
+app.get('/movies', async(request, response, next) => {
 
   try {
-    let searchQuery = request.query.searchQuery;
-    console.log(searchQuery);
-    let dataToGroom = weatherData.find(object => object.city_name.toLowerCase() === searchQuery.toLowerCase());
+
+    let url=`https://api.themoviedb.org/3/search/movies?key=${process.env.MOVIE_API_KEY}&searchQurery=${movieQuery}`;
+    let dataToGroom = await axios.get(url);
     let dataToSend = dataToGroom.data.map(weatherDatetime => new Forecast(weatherDatetime));
     response.status(200).send(dataToSend);
 
