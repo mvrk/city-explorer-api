@@ -8,12 +8,13 @@ require('dotenv').config();
 const axios = require('axios');
 
 //REQUIRE MODULES-----------------------------------
-const getWeather = require('./modules/weather.js')
+const getWeather = require('./modules/weather.js');
 const getMovies = require('./modules/movies.js');
 
 //USE-----------------------------------------
 const app = express();
 app.use(cors());
+app.use(express.json());
 const PORT = process.env.PORT || 3008;
 
 //TEST--------------------------------------------
