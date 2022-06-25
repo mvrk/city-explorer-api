@@ -3,6 +3,17 @@
 
 **Author**: Rui Guo
 **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
+## WRRC For each labs
+### Lab 6
+![lab6](./wrrc/lab6_wrrc_Stephanie_Rui.jpg)
+### Lab 7
+![lab7](./wrrc/lab7_wrrc_Alec_Dom_Rui.png)
+### Lab 8
+![lab8](./wrrc/lab8_WRRC_Rui_Marco.jpg)
+### Lab 9
+![lab9](./wrrc/lab9_wrrc%20_Falashade_Rui.jpg)
+### Lab 10
+![lab10](./wrrc/Lab10_WRRC_Matthew_Rui.jpg)
 
 ## Overview
 <!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
